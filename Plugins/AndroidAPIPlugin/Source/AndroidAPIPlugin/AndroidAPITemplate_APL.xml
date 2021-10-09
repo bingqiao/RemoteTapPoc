@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2020 Isara Technologies. All Rights Reserved. -->
+<!--GearVR plugin additions-->
+<root xmlns:android="http://schemas.android.com/apk/res/android">
+	<!-- init section is always evaluated once per architecture -->
+	<trace enable="true"/>
+	<init>
+		<log text="AndroidAPIPlugin init"/>		
+	</init>
+
+  <androidManifestUpdates>
+    <addElements tag="application">
+	  
+	  <activity android:name="com.bqiao.androidapi.AndroidAPIPluginActivity"
+          android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+          android:label="@string/app_name" />
+		  
+    </addElements>
+
+		
+  </androidManifestUpdates>
+
+  <!-- optional additions to proguard -->
+  <proguardAdditions>
+    <insert><![CDATA[
+      -keepattributes Signature
+      -dontskipnonpubliclibraryclassmembers
+
+     -keepclassmembers class com.epicgames.ue4.GameActivity {
+            public <methods>;
+            public <fields>;
+     }
+    ]]></insert>
+  </proguardAdditions>
+
+  <resourceCopies>
+    <!-- Copy the generated resource file to be packaged -->
+  </resourceCopies>
+
+  <AARImports>
+  </AARImports>
+  
+  <!-- optional additions to the GameActivity imports in GameActivity.java -->
+	<gameActivityImportAdditions>
+	  <insert>
+		import android.widget.Toast;
+		import android.os.SystemClock;
+		import android.util.Log;
+		import android.view.MotionEvent;
+		import java.io.IOException;
+    </insert>
+	</gameActivityImportAdditions>
+	
+
+	<!-- optional additions to the GameActivity class in GameActivity.java -->
+	<gameActivityClassAdditions>
+		<insert>
+      <![CDATA[
+	  	private Toast mToast;
+		public void AndroidThunkJava_AndroidAPI_TouchLocation(final float x, final float y) {
+			long originalDownTime = SystemClock.uptimeMillis();
+			long eventTime = SystemClock.uptimeMillis() + 100;
+			int metaState = 0;
+			MotionEvent motionEvent = MotionEvent.obtain(
+					originalDownTime,
+					eventTime,
+					MotionEvent.ACTION_DOWN,
+					x,
+					y,
+					metaState
+			);
+			boolean returnVal = this.dispatchTouchEvent(motionEvent);
+			//Log.d("MainActivity-bqiao","rteurnVal: " + returnVal);
+
+			//Create amd send the ACTION_UP MotionEvent
+			eventTime= SystemClock.uptimeMillis() + 100;
+			motionEvent = MotionEvent.obtain(
+					originalDownTime,
+					eventTime,
+					MotionEvent.ACTION_UP,
+					x,
+					y,
+					metaState
+			);
+			returnVal = this.dispatchTouchEvent(motionEvent);
+			//Log.d("MainActivity-bqiao","rteurnVal: " + returnVal);
+			AndroidThunkJava_AndroidAPI_ShowToast("" + x + ":" + y + "-" + returnVal);
+			try {
+            	Runtime.getRuntime().exec("input tap " + x + " " + y);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		/**
+		* Simply shows a toast text
+		*/
+		public void AndroidThunkJava_AndroidAPI_ShowToast(final String toast) {
+			runOnUiThread(new Runnable() {
+					public void run() {
+							CharSequence cs = toast;
+							//Log.d("MainActivity-bqiao", toast);
+							System.out.println(toast);
+							if (mToast != null) {
+								mToast.cancel();
+							}
+							mToast = Toast.makeText(getApplicationContext(), cs, Toast.LENGTH_LONG);
+							mToast.show();
+					}
+			});
+		}
+		]]>
+		</insert>
+	</gameActivityClassAdditions>
+	
+	<!-- optional additions to GameActivity ReadMETADATA metadata reading in GameActivity.java -->
+	<gameActivityReadMetadataAdditions>
+	<insert>
+
+  </insert>
+	</gameActivityReadMetadataAdditions>
+	
+	<!-- optional additions to GameActivity onCreate in GameActivity.java -->
+	<gameActivityOnCreateAdditions>
+		<insert>
+		</insert>
+	</gameActivityOnCreateAdditions>
+
+	<!-- optional additions to GameActivity onDestroy in GameActivity.java -->
+	<gameActivityOnDestroyAdditions>
+		<insert>
+		
+		</insert>
+	</gameActivityOnDestroyAdditions>
+	
+	
+	<!-- optional additions to GameActivity onStart in GameActivity.java -->
+	<gameActivityOnStartAdditions>
+		<insert>
+		
+		</insert>
+	</gameActivityOnStartAdditions>
+
+	<!-- optional additions to GameActivity onStop in GameActivity.java -->
+	<gameActivityOnStopAdditions>
+		<insert>
+		
+		</insert>
+	</gameActivityOnStopAdditions>
+	
+
+	<!-- optional additions to GameActivity onPause in GameActivity.java	-->
+	<gameActivityOnPauseAdditions>
+    <insert>
+    </insert>
+  </gameActivityOnPauseAdditions>
+
+
+  <!-- optional additions to GameActivity onResume in GameActivity.java	-->
+  <gameActivityOnResumeAdditions>
+    <insert>
+    </insert>
+  </gameActivityOnResumeAdditions>
+
+
+	<!-- optional additions to GameActivity onActivityResult in GameActivity.java -->
+	<gameActivityOnActivityResultAdditions>
+		<insert>
+		</insert>
+    </gameActivityOnActivityResultAdditions>
+	
+
+	<!-- optional libraries to load in GameActivity.java before libUE4.so -->
+	<soLoadLibrary>
+		<!-- need this if plugin enabled and supported architecture, even if not packaged for GearVR -->
+	</soLoadLibrary>
+</root>

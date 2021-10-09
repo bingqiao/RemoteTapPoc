@@ -1,0 +1,11 @@
+.git
+.vscode
+Content
+DerivedDataCache
+Intermediate
+Saved
+Script
+TestSocket-Server-2.0.0
+Plugins/AndroidAPIPlugin/Content
+Plugins/AndroidAPIPlugin/Intermediate
+Plugins/socketio-client-ue4/Intermediate
