@@ -16,8 +16,8 @@ The NodeJS project for server is inside TestSocket-Server-2.0.0.
 
 There are two buttons on the app screen. The `Manual Click` button will simulate a tap at location defined by the top x/y values while the `Remote Click` button increments the `Counter` value above for every click on it.
 
-A `tap` command can be sent to the NodeJS server which then fowards it to the UE client. This comand includes x/y values. The UE client upon receiving a tap command simulates a screen tap. The actual tap even coordinates received by Unreal Engine will show in the x/y textboxes at the bottom.
+A `tap` command can be sent to the NodeJS server which then fowards it to the UE client. This comand includes x/y values. The UE client upon receiving a tap command simulates a screen tap. The actual tap event coordinates received by Unreal Engine will show in the x/y textboxes at the bottom.
 
 If this simulated `tap` is on the `Remote Click` button, the `Counter` will increase to indicate the remote tap was successful.
 
-
+Socket.io plugin is from [socketio-client-ue4](https://github.com/getnamo/socketio-client-ue4). The latest version 4.26 as of writing has issues packaging for Android see [android package BUILD FAILED](https://github.com/getnamo/socketio-client-ue4/issues/274). Acknowledgement is not supported yet, see [Acknowledgement to Server?](https://github.com/getnamo/socketio-client-ue4/issues/283).
